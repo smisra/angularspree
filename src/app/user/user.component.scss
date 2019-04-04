@@ -1,14 +1,17 @@
+@import '../shared/scss/selected_theme_variables';
 p a {
-  color: #697071;
+  color: $gray-600;
   text-decoration: none;
   &.active {
-    font-family: Whitney-semi-bold;
-    color: #20bd99;
-    font-weight: 500;
+    font-family: $primary-font;
+    color: $theme-action-color;
+    font-weight: 900;
     background-color: transparent;
   }
 }
-
+.bg {
+  padding: 0;
+}
 .sidebar {
-  border-right: 1px solid #eaeaec;
+  border-right: 1px solid $gray-10;
 }

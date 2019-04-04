@@ -1,46 +1,110 @@
-import { LineItem } from './../../core/models/line_item';
+import { Address } from './../../core/models/address';
+import { Action } from '@ngrx/store';
+import { map, switchMap } from 'rxjs/operators';
 import { CheckoutService } from './../../core/services/checkout.service';
 import { CheckoutActions } from './../actions/checkout.actions';
-import { Action } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
+import { Order } from '../../core/models/order';
+import { AddressService } from '../address/services/address.service';
+import { PaymentService } from '../payment/services/payment.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class CheckoutEffects {
+  isBuyNowAction: boolean;
 
-  constructor(private actions$: Actions,
-  private checkoutService: CheckoutService,
-  private actions: CheckoutActions) {}
-
-  // tslint:disable-next-line:member-ordering
   @Effect()
-    AddToCart$ = this.actions$
-    .ofType(CheckoutActions.ADD_TO_CART)
-    .switchMap((action: Action) => {
-      return this.checkoutService.createNewLineItem(action.payload);
+  AddToCart$ = this.actions$.pipe(
+    ofType(CheckoutActions.ADD_TO_CART),
+    switchMap<
+      Action & {
+        payload: { variant_id: number; quantity: number; isBuyNow: boolean };
+      },
+      Order
+    >(action => {
+      this.isBuyNowAction = action.payload.isBuyNow;
+      return this.checkoutService.createNewLineItem(
+        action.payload.variant_id,
+        action.payload.quantity
+      );
+    }),
+    map(order => {
+      if (this.isBuyNowAction) {
+        this.router.navigate(['checkout', 'cart']);
+      }
+      return this.actions.fetchCurrentOrderSuccess(order);
     })
-    .map((lineItem: LineItem) => this.actions.addToCartSuccess(lineItem));
-  }
-  // @Effect()
-    // FetchCurrentOrder$ = this.actions$
-    // .ofType(CartActions.FETCH_CURRENT_ORDER)
-    // .switchMap((action: Action) => {
-    //   return this.cartService.fetchCurrentOrder();
-    // })
-    // .map((order: Order) => {
-    //   return this.cartActions.fetchCurrentOrderSuccess(order);
-    // });
+  );
 
+  @Effect()
+  OrderDetails$ = this.actions$.pipe(
+    ofType(CheckoutActions.GET_ORDER_DETAILS),
+    switchMap<Action, Order>(_ => this.checkoutService.getOrder()),
+    map(order => this.actions.fetchCurrentOrderSuccess(order))
+  );
 
+  @Effect()
+  BindAddress$ = this.actions$.pipe(
+    ofType(CheckoutActions.BIND_ADDRESS),
+    switchMap<
+      Action & { payload: { address: Address; orderId: number } },
+      Order
+    >(action => {
+      return this.addressService.bindAddressToOrder(
+        action.payload.address,
+        action.payload.orderId
+      );
+    }),
+    map(order => this.actions.fetchCurrentOrderSuccess(order))
+  );
 
-  // Use this effect once angular releases RC4
+  @Effect()
+  BindPayment$ = this.actions$.pipe(
+    ofType(CheckoutActions.BIND_PAYMENT),
+    switchMap<
+      Action & {
+        payload: {
+          paymentMethodId: number;
+          orderId: number;
+          orderAmount: number;
+        };
+      },
+      Order
+    >(action => {
+      return this.paymentService.addPaymentToOrder(
+        action.payload.paymentMethodId,
+        action.payload.orderId,
+        action.payload.orderAmount
+      );
+    }),
+    map(order => this.actions.getOrderPaymentsSuccess(order))
+  );
 
-  // @Effect()
-  //   RemoveLineItem$ = this.actions$
-  //   .ofType(CartActions.REMOVE_LINE_ITEM)
-  //   .switchMap((action: Action) => {
-  //     return this.cartService.deleteLineItem(action.payload);
-  //   })
-  //   .map(() => this.cartActions.removeLineItemSuccess());
+  @Effect()
+  ShippingPreferencess$ = this.actions$.pipe(
+    ofType(CheckoutActions.SHIPPING_PREFERENCES),
+    switchMap<
+      Action & { payload: { orderId: number; packages: Array<{}> } },
+      Order
+    >(action => {
+      return this.checkoutService.saveShippingPreferences(
+        action.payload.orderId,
+        action.payload.packages
+      );
+    }),
+    map(order => {
+      this.router.navigate(['/checkout', 'payment']);
+      return this.actions.fetchCurrentOrderSuccess(order);
+    })
+  );
 
+  constructor(
+    private actions$: Actions,
+    private checkoutService: CheckoutService,
+    private actions: CheckoutActions,
+    private addressService: AddressService,
+    private paymentService: PaymentService,
+    private router: Router
+  ) {}
+}

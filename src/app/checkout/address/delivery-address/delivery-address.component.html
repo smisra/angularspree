@@ -1,23 +1,25 @@
-<div class="items">
+<div class="items" *ngIf="address">
   <div class="address-row">
-    <div class="name">{{address.full_name}}</div>
+    <div class="name">
+      <strong>{{ address.first_name }} {{ address.last_name }}</strong>
+    </div>
     <div class="address">
       <div class="address-content">
-        <div class="address-field">{{address.address1}}</div>
-        <div class="address-field">{{address.address2}}</div>
-        <span class="address-field">{{address.city}}</span>
-        <span class="address-field">-{{address.zipcode}}</span>
-        <div class="mob">
+        <div class="address-field">{{ address.address_line_1 }}</div>
+        <div class="address-field">{{ address.address_line_2 }}</div>
+        <span class="address-field"
+          >{{ address.city }} - {{ address.zip_code }}</span
+        >
+        <div class="address-field">{{ address?.state?.name }}</div>
+        <div class="address-field">{{ address.country.name }}</div>
+        <div class="address-field">
           <span class="mob-lbl">Mobile: </span>
-          <span class="mob-no">{{address.phone}}</span>
+          <span class="mob-no">{{ address.phone }}</span>
         </div>
       </div>
     </div>
+    <br />
     <div class="serviceability">
-      <div class="try-and-buy">
-        <span class="mid-dot">•</span>
-        Try and Buy available
-      </div>
       <div class="cod">
         <span class="mid-dot">•</span>
         Cash/Card on Delivery available
@@ -27,10 +29,5 @@
         Standard Delivery available
       </div>
     </div>
-    <button class="select"></button>
-    <!--<div class="remove-edit">
-      <span class="remove">Remove</span>
-      <span class="edit">Edit</span>
-    </div>-->
   </div>
 </div>

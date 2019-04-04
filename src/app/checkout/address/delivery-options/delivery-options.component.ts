@@ -1,45 +1,62 @@
 import { AppState } from './../../../interfaces';
 import { Store } from '@ngrx/store';
-import { getTotalCartValue, getTotalCartItems } from './../../reducers/selectors';
-import { Observable } from 'rxjs/Observable';
-import { Order } from './../../../core/models/order';
+import {
+  getTotalCartValue,
+  getTotalCartItems,
+  getShipTotal,
+  getItemTotal,
+  getAdjustmentTotal,
+  getOrderState
+} from './../../reducers/selectors';
+import { Observable, Subscription } from 'rxjs';
 import { CheckoutService } from './../../../core/services/checkout.service';
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  EventEmitter,
+  Output
+} from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-delivery-options',
   templateUrl: './delivery-options.component.html',
   styleUrls: ['./delivery-options.component.scss']
 })
-export class DeliveryOptionsComponent implements OnInit {
-
-  @Input() orderNumber;
-  order;
-  selectedShippingRate;
-  shippingRates = [];
+export class DeliveryOptionsComponent implements OnInit, OnDestroy {
+  @Output() onCheckoutToPayment = new EventEmitter<boolean>();
   totalCartValue$: Observable<number>;
   totalCartItems$: Observable<number>;
+  itemTotal$: Observable<number>;
+  shipTotal$: Observable<number>;
+  adjustmentTotal$: Observable<number>;
+  currency = environment.config.currency_symbol;
+  freeShippingAmount = environment.config.freeShippingAmount;
+  orderSub$: Subscription;
+  orderState$: Observable<string>;
 
-  constructor(private checkoutService: CheckoutService, private store: Store<AppState>) {
-    this.totalCartValue$ = this.store.select(getTotalCartValue);
-    this.totalCartItems$ = this.store.select(getTotalCartItems);
-  }
+  constructor(
+    private checkoutService: CheckoutService,
+    private store: Store<AppState>
+  ) {}
 
   ngOnInit() {
-    // this.setOrder();
+    this.orderSub$ = this.checkoutService.fetchCurrentOrder().subscribe(_ => {
+      this.totalCartValue$ = this.store.select(getTotalCartValue);
+      this.totalCartItems$ = this.store.select(getTotalCartItems);
+      this.shipTotal$ = this.store.select(getShipTotal);
+      this.itemTotal$ = this.store.select(getItemTotal);
+      this.adjustmentTotal$ = this.store.select(getAdjustmentTotal);
+      this.orderState$ = this.store.select(getOrderState);
+    });
   }
 
-  private setOrder() {
-    this.checkoutService.getOrder(this.orderNumber)
-      .subscribe((order) => {
-        this.order = order;
-        this.setShippingRates();
-      });
+  ngOnDestroy() {
+    this.orderSub$.unsubscribe();
   }
 
-  private setShippingRates() {
-    this.shippingRates = this.order.shipments[0].shipping_rates;
-    this.selectedShippingRate = this.order.shipments[0].selected_shipping_rate;
+  checkoutToPayment() {
+    this.onCheckoutToPayment.emit();
   }
-
 }

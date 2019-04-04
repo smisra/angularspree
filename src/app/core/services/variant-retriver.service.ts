@@ -20,8 +20,7 @@ export class VariantRetriverService {
   product: Product;
   newCorrespondingOptions: any;
 
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Note: Params could have been taken in constructor
@@ -34,11 +33,12 @@ export class VariantRetriverService {
    * currSelectedOption: { key: "Small", value: Object } => One that is recently selected;
    * product: Product
    */
-  getVariant(currentSelectedOptions: any,
+  getVariant(
+    currentSelectedOptions: any,
     customOptionTypesHash: any,
     currSelectedOption: any,
-    product: any) {
-
+    product: any
+  ) {
     // Set Variables
     this.currentSelectedOptions = currentSelectedOptions;
     this.customOptionTypesHash = customOptionTypesHash;
@@ -59,26 +59,26 @@ export class VariantRetriverService {
     };
   }
 
-
   /**
    * This sets current selected Options by user say (small, red, full-sleves)
    * { tsize: 'small', tcolor: 'red' }
-   * if new currSelectedOptionType is tcolor and the value is blue the 
+   * if new currSelectedOptionType is tcolor and the value is blue the
    * previous one will get overidden
    * like { tsize: 'small', tcolor: 'red' } => { tsize: 'small', tcolor: 'blue' }
    *
    */
   setCurrentSelectedOptions() {
-    const currSelectedOptionType = this.currSelectedOption.value
-      .optionValue
-      .option_type_name;
-    this.currentSelectedOptions[currSelectedOptionType] = this.currSelectedOption.key;
+    const currSelectedOptionType = this.currSelectedOption.value.optionValue
+      .option_type.name;
+    this.currentSelectedOptions[
+      currSelectedOptionType
+    ] = this.currSelectedOption.key;
   }
 
   /**
    * It creates Custom selected Options extracting the options selected by user from
    *  customOptionTypesHash
-   * say user selected {tsize: 'small'} this will extract the red option from 
+   * say user selected {tsize: 'small'} this will extract the red option from
    * the global option types hash {'tsize': [small: {etc..}, large: {etc..}, medium: {etc..}]}
    *
    */
@@ -88,17 +88,19 @@ export class VariantRetriverService {
      * currentSelectedOptions: {} at first.. keeps
      * filling up on iteration of currentSelectedOptions
      *
-     * this.customOptionTypesHash[key][this.currentSelectedOptions[key]] = 
+     * this.customOptionTypesHash[key][this.currentSelectedOptions[key]] =
      * { optionValue: SomeObject, varaintIds: {etc etc} }
      *
      *
      ** */
+
     for (const key in this.currentSelectedOptions) {
       if (this.currentSelectedOptions.hasOwnProperty(key)) {
-        this.customSelectedOptions[this.currentSelectedOptions[key]] =
-          this.customOptionTypesHash[key][this.currentSelectedOptions[key]];
+        this.customSelectedOptions[
+          this.currentSelectedOptions[key]
+        ] = this.customOptionTypesHash[key][this.currentSelectedOptions[key]];
       }
-    };
+    }
   }
   /**
    * Makes a currentVaraintIds from the set of customSelectedOptions
@@ -114,11 +116,10 @@ export class VariantRetriverService {
       if (this.customSelectedOptions.hasOwnProperty(key)) {
         // Make temp empty for each key;
         temp = [];
-        this.customSelectedOptions[key].variantIds.forEach((obj) => {
+        this.customSelectedOptions[key].variantIds.forEach(obj => {
           temp.push(Object.keys(obj)[0]);
         });
-        this.currentVariantIds
-          .push(temp);
+        this.currentVariantIds.push(temp);
       }
     }
   }
@@ -128,20 +129,19 @@ export class VariantRetriverService {
    * by intersecting the arrays in currentvaraintIds
    * Example: [[1,2,3,4], [1,5,6,7]]
    * returns [1] from which we take first index so it is 1;
-   * if the array only contains [[2,3,4]] then it will return 
+   * if the array only contains [[2,3,4]] then it will return
    * the first element i.e 2;
    */
   getVariantId() {
     // As scoped variable is not accessible
     // inside filter function hence the tempArr declaration;
     const tempArr = this.currentVariantIds;
-    this.variantId = tempArr.shift().filter(function (v) {
-      return tempArr.every(function (a) {
+    this.variantId = tempArr.shift().filter(function(v) {
+      return tempArr.every(function(a) {
         return a.indexOf(v) !== -1;
       });
     })[0];
   }
-
 
   /**
    * Parses Varaint Id if null then sets the first
@@ -158,11 +158,18 @@ export class VariantRetriverService {
    * else returns null if not present;
    */
   getVariantFromProduct() {
-    const result = this.product.variants
-      .filter(v => { return v.id === parseInt(this.variantId, 10); });
+    const result = this.product.variants.filter(v => {
+      return v.id === this.variantId;
+    });
     this.variant = result ? result[0] : null;
   }
 
+  /**
+   *
+   *
+   *
+   * @memberof VariantRetriverService
+   */
   setCorrespondingOptions() {
     const vIds: Array<any> = this.currSelectedOption.value.variantIds;
     const newObj = {};

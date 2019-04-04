@@ -1,40 +1,80 @@
-import { Injectable } from '@angular/core';
-import { HttpService } from '../../core/services/http';
-import { UserActions } from '../actions/user.actions';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../interfaces';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { Order } from '../../core/models/order';
-import { Response } from '@angular/http';
 import { User } from '../../core/models/user';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable()
 export class UserService {
-
   constructor(
-    private http: HttpService,
-    private actions: UserActions,
-    private store: Store<AppState>
-  ) { }
+    private http: HttpClient,
+    private toastrService: ToastrService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   /**
-   * Performs a request with `get` http method.
-   * @returns Observable<Order[]>
+   *
+   *
+   * @returns {Observable<Order[]>}
+   *
+   * @memberof UserService
    */
-  getOrders(): Observable<Order[]> {
-    return this.http.get('api/orders')
-      .map((res: Response) => res.json());
+  getOrders(): Observable<Array<Order>> {
+    return this.http
+      .get<{ data: Array<Order> }>(`api/v1/orders`)
+      .pipe(map(resp => resp.data));
   }
 
-  getOrderDetail(orderNumber): Observable<Order> {
-    return this.http.get(`spree/api/v1/orders/${orderNumber}`)
-      .map((res: Response) => res.json());
+  /**
+   *
+   *
+   * @param {string} orderNumber
+   * @returns {Observable<Order>}
+   *
+   * @memberof UserService
+   */
+  getOrderDetail(orderNumber: string): Observable<Order> {
+    const url = `api/v1/orders/${orderNumber}`;
+    return this.http.get<{ data: Order }>(url).pipe(map(resp => resp.data));
   }
 
+  /**
+   *
+   *
+   * @returns {Observable<User>}
+   *
+   * @memberof UserService
+   */
   getUser(): Observable<User> {
-    const user_id = JSON.parse(localStorage.getItem('user')).id;
-    return this.http.get(`spree/api/v1/users/${user_id}`)
-      .map(res => res.json());
+    const user_id = isPlatformBrowser(this.platformId)
+      ? JSON.parse(localStorage.getItem('user')).id
+      : null;
+    return this.http
+      .get<{ data: User }>(`api/v1/users/${user_id}`)
+      .pipe(map(resp => resp.data));
   }
 
+  updateUser(params: any): Observable<User> {
+    return this.http
+      .put<{ data: User }>(`api/v1/users/${params.user_id}`, params)
+      .pipe(map(resp => resp.data));
+  }
+
+  updateUserPassword(params: any) {
+    return this.http.put(`auth/change_password`, params).pipe(
+      map(
+        (success: any) => {
+          this.toastrService.success(success.status, 'Success!');
+          return true;
+        },
+        (error: any) => {
+          this.toastrService.error(error.status, 'Error!');
+          return false;
+        }
+      )
+    );
+  }
 }

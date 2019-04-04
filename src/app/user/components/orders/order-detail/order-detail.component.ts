@@ -1,14 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../../interfaces';
-import { UserActions } from '../../../actions/user.actions';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID
+} from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { Order } from '../../../../core/models/order';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { LineItem } from '../../../../core/models/line_item';
+import { CheckoutService } from '../../../../core/services/checkout.service';
 
 @Component({
   selector: 'app-order-detail',
@@ -18,35 +22,46 @@ import { LineItem } from '../../../../core/models/line_item';
 export class OrderDetailComponent implements OnInit, OnDestroy {
   routeSubscription$: Subscription;
   orderSubscription$: Subscription;
-  orderNumber: String;
+  orderNumber: string;
   order: Order;
+  isMobile = false;
+  screenwidth: any;
+  currency = environment.config.currency_symbol;
+  noImageUrl = 'assets/default/image-placeholder.svg';
 
   constructor(
     private userService: UserService,
-    private route: ActivatedRoute
-  ) {
-  }
+    private route: ActivatedRoute,
+    private checkoutService: CheckoutService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
-    this.routeSubscription$ = this.route.params.subscribe(
-      (params: any) => {
-        this.orderNumber = params['number'];
-        this.orderSubscription$ =
-          this.userService
-          .getOrderDetail(this.orderNumber)
-          .subscribe(order => this.order = order);
-     }
-    );
+    this.routeSubscription$ = this.route.params.subscribe((params: Object) => {
+      this.orderNumber = params['number'];
+      this.orderSubscription$ = this.userService
+        .getOrderDetail(this.orderNumber)
+        .subscribe(order => (this.order = order));
+    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.screenwidth = window.innerWidth;
+    }
+    this.calculateInnerWidth();
+  }
+
+  calculateInnerWidth() {
+    if (this.screenwidth <= 1000) {
+      this.isMobile = this.screenwidth;
+    }
   }
 
   getProductImageUrl(line_item: LineItem) {
-    const image_url = line_item.variant.images[0].small_url;
-    return environment.API_ENDPOINT + image_url;
+    const imageUrl = line_item.product.default_image;
+    return imageUrl ? imageUrl.default_product_url : this.noImageUrl;
   }
 
   ngOnDestroy() {
     this.routeSubscription$.unsubscribe();
     this.orderSubscription$.unsubscribe();
   }
-
 }

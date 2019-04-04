@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Order } from '../../../../core/models/order';
-import { environment } from '../../../../../environments/environment';
+import { LineItem } from '../../../../core/models/line_item';
+import { environment } from '../../../../../environments/environment.dev-ng-spree';
 
 @Component({
   selector: 'app-order-list-item',
@@ -8,15 +9,17 @@ import { environment } from '../../../../../environments/environment';
   styleUrls: ['./order-list-item.component.scss']
 })
 export class OrderListItemComponent implements OnInit {
-  @Input() order: Order;
+  @Input() orders: Array<Order>;
+  @Input() isMobile: boolean;
+  currency = environment.config.currency_symbol;
+  noImageUrl = 'assets/default/image-placeholder.svg';
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  getProductImageUrl(line_item: LineItem) {
+    const imageUrl = line_item.product.images[0];
+    return imageUrl ? imageUrl.small : this.noImageUrl;
   }
-
-  getProductImageUrl(url) {
-    return environment.API_ENDPOINT + url;
-  }
-
 }

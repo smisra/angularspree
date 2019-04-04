@@ -1,205 +1,79 @@
 <p align="center">
-  <a href="https://angularspree.firebaseapp.com/" target='_blank'>
-    <img alt="AngualreSpree Logo" title="AngularSpree Logo" src="http://res.cloudinary.com/mally/image/upload/v1490186051/Angular_spree_hqgwtq.png" width="200">
+    <img alt="Aviacommerce logo" title="Aviacommerce Logo" src="https://res.cloudinary.com/aviabird/image/upload/h_250/v1539065176/aviacommerce/logo/main.png">
+</p>
+<p align="center">
+  <a href="https://travis-ci.com/aviacommerce/avia">
+    <img src="https://travis-ci.com/aviacommerce/avia.svg?branch=develop" alt="travis" title="build-status"/>
+  </a>
+  <a href="https://codecov.io/gh/aviacommerce/avia">
+    <img src="https://codecov.io/gh/aviacommerce/avia/branch/develop/graph/badge.svg" alt="codecov" title="coverage-status"/>
+  </a>
+  <a href="http://inch-ci.org/github/aviacommerce/avia">
+    <img src="http://inch-ci.org/github/aviacommerce/avia.svg?branch=develop" alt="inch-ci" title="doc-status"/>
+  </a>
+  <a href="https://www.pivotaltracker.com/n/projects/2149807">
+    <img src="http://res.cloudinary.com/zeus999/image/upload/c_limit,h_1041,w_1487/v1486457388/Yatrum%20Logo/pt-badge_ss3dyt.svg" alt="pivotal" title="project-tracker"/>
+  </a>
+   <a href="">
+    <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat" alt="license" title="Software License"/>
   </a>
 </p>
 
-<p align="center">
-  AngularSpree Plug and play frontend application for SPREE E-Commerce API built with ❤️ using Angular2, Redux, Observables & ImmutableJs.
-</p>
+# AngularSpree
 
-<p align="center">
-  <a href="https://angularspree.firebaseapp.com/" target='_blank'>Check demo</a>
-</p>
+**AngularSpree is an Angular(7) e-commerce application.**
 
-<p align="center">
-  <a href="/CONTRIBUTING.md" target='_blank'><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-  <a href="https://www.pivotaltracker.com/n/projects/1985365" target='_blank'><img alt="Pivotal Project page" src="http://res.cloudinary.com/zeus999/image/upload/c_limit,h_1041,w_1487/v1486457388/Yatrum%20Logo/pt-badge_ss3dyt.svg"></a>
-</p>
+It is a plug and play frontend application for [AviaCommerce API](https://www.aviacommerce.org/docs/apis-getting-started.html) built using Angular(7), Redux, Observables & ImmutableJs.
 
-### :rocket: **Progressive Web App:** [Lighthouse](https://github.com/GoogleChrome/lighthouse) score of __95/100__.
+**It is not limited to aviacommerce and can also be used with any e-commerce solution with an api interface. Such as spreecommerce, magento, opencart etc.**
 
-## What is AngularSpree?
+- 🌍 [aviacommerce](https://aviacommerce.org/) - Learn more about AngularSpree
+- 📖 [Documentation](https://www.aviacommerce.org/docs/frontend-install.html)
+- 📚 [API Documentation](https://www.aviacommerce.org/docs/apis-getting-started.html)
+- 👍 Like us on [Facebook](https://www.facebook.com/aviacommerce)
+- 🕊 Twitter: [@aviacommerce](https://twitter.com/aviacommerce) - Get the latest news
+- 🐞 Issue Tracker: - [Issues](https://github.com/aviacommerce/avia/issues) - Report bugs here
+- 🗨 [Forums](https://forum.aviacommerce.org/) - Discussions(Coming soon)
+- 👪 [Community Chat](https://gitter.im/avia-commerce/Lobby) - Gitter
 
-AngularSpree is an open source Angular(2.x+) front-end application for [Spree Commerce](https://github.com/spree/spree). 
-**It's free and always will be**. 
+### Important Note
 
-**Bootstrap 4 Compatible**
+AngularSpree is now a part of [Aviacommerce Project](https://aviacommerce.org). Further development of angularspree will happen in _this repository only_. Also, check the [aviacommerce repo](https://github.com/aviacommerce/avia) where this repository exists as a submodule.
 
-Go ahead use it the way you want to or let us know at `hello@aviabird.com` if you need any help with this project.
+## Features
 
-<p align="center">
-  <a href="https://angular-spree.herokuapp.com/" target='_blank'>
-    <img alt="Slack invite Logo" title="Slack invite Logo" src="http://res.cloudinary.com/yatrum/image/upload/v1490434825/slack_vmaait.png" width="300">
-  </a>
-</p>
+Please check the online demo [here](https://www.aviacommerce.org/demo/demo.html).
 
+### Features of this mobile appliction are:-
 
-## Why did we build it?
+1. Product List Page
+2. Product Detail Page
+3. Filters by Category, options, size etc
+4. Sort(New arrival, Price)
+5. Advanced searching and autocomplete with Elasticsearch
+6. Add/update to cart
+7. Notifications for order update notification, payment failure
+8. Chat with seller feature, messaging
+9. Payment methods(COD, Stripe, Payubiz, RazorPay and 29 others)
 
-We have been working with Spree for very long time, making products for a lot of clients. There was one pattern we noticed in what the clients always asked for. They were comfortable using spree for the backend [API](http://guides.spreecommerce.org/api/) but not for the front-end. These requests have been very consistent with so many awesome [front-end framework](https://github.com/showcases/front-end-javascript-frameworks) around.
+### Admin has following features for sellers:-
 
-When Angular team realeased the beta version in March last year we knew that angular was going to be a big player soon.
-We decided to give it a try. Hence, AngularSpree was born as a front-end framework for the most awesome backend api for E-Commerce out there.
+1. Add/update products/inventory.
+2. Manage orders
+3. Manage Categories/Taxonomies
+4. Support for Variants and Option Types, Option Sets
+5. Shipping settings/policy(free shipping, shipping rules)
+6. Promotions(coupons per user, total usage count)
+7. Manage Users(admin, user types)
+8. Taxation
+9. Send emails and notifications.
 
-## What's included?
+### Quick Links
 
-Currently, this is a fairly basic vesion of the application. We are calling it a pre-alpha release.
+| [Gitter](https://gitter.im/avia-commerce/Lobby) | [Contributing](https://www.aviacommerce.org/docs/how-to-contribute.html) | [API Specs](https://www.aviacommerce.org/docs/apis-getting-started.html) |
+| ----------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
 
-### What's working and ready to be deployed?
-* Add/Remove products to cart.
-* Select/Clear filters based on category.
-* Support for product variants.
-* Cart checkout feature.
-* Cash on delivery option.
-* Authentication (Login/Signup)
 
-### What's coming very soon?
-* __Angular Universal__ support for better SEO and [much more](https://github.com/angular/angular/issues/13822).
-* __Payment__ options credit/debit cards.
-* __Multilanguage__ Support i18n.
-* More sorting features(new/popular, Discount, Price[low,high]).
-* Support for further types of products(size, pattern, collar, etc).
-* Support for further options in types eg. size(32, 34, 36) etc. etc.
-* Ability to add more than one addresses.
-* and many more....
+This project is an open-source initiative by[ Aviabird Technologies](https://aviabird.com) under the [Aviacommerce](https://aviacommerce.org) open-source project.
 
-There is a long way to go... keep an eye on this [project](https://github.com/aviabird/angularspree/) here on github.
-
-## Angular 2 Fundamentals course
-
-Based on this application and **[other applications](https://github.com/aviabird/yatrum)** we have built in past we are working on a full blown Angular 2 fundamentals course on udemy. Throughout this course you'll learn how to build yatrum from ground up.
-
-### Course curriculum
-
-* Architecture, setup, source files
-* TypeScript basics
-* Getting started with latest angular
-* Template fundamentals
-* Rendering flows
-* Component Architecture and Modules
-* Services, Http and Observables
-* Template Forms, Inputs and Validation
-* Reactive Forms and more magic
-* Routing
-
-__[Subscribe to this course here](https://upscri.be/a00eaf/)__
-
-## What in the Tech News?
-
-We've built AngularSpree keeping scaling in mind leveraging the best technologies out there.
-
-As of now, the application has 7 major modules, `products`, `core`, `home`, `user`, `checkout`, `auth`, `shared`.
-
-We are working on documentation and we can share that once we are looking at a more stable release.
-
-* Exclusively using @ngrx libraries(store, effects, actions), showcasing common patterns and best practices.
-* Fully Observable approach using RxJS 5.0.1(latest beta).
-* Uses @ngrx/store to manage the state of the app and to cache requests made to the Backend API, 
-* @angular/router to manage navigation between routes, 
-* @ngrx/effects to isolate side effects.
-* @ngrx/actions to define the actions on the frontend.
-* Following Container/Presentation component approach.
-* Lazy loading of modules(for modules which are not immediately required for first painting the DOM).
-* ImmutableJs to create and safeguard objects againts mutability.
-* Project is divided into modules which are more or less independant of each other except core module.
-
-__Current version of Angular is latest release [4.0.0](https://github.com/angular/angular/releases/tag/4.0.0).__
-
-__Current version of Angular-cli is [1.0.0](https://github.com/angular/angular-cli/releases/tag/v1.0.0).__
-
-We try to make sure that we keep the repository upto date with the angular release every weekend.
-
-## Screenshots
-
-### Home Page
-
-On this page user can filter products as per category. Change layout of the products(cozy, comfortable) etc.
-
-<p align="center">
-  <a href="https://angularspree.firebaseapp.com/" target="_blank">
-    <img alt="AngualreSpree Logo" title="AngularSpree Logo" width="80%" src="http://res.cloudinary.com/yatrum/image/upload/c_limit,h_1041,w_1487/v1490188458/screen_home.png">
-  </a>
-</p>
-
-### Cart Page
-
-Cart page displays all the line items or items in the cart which the user has added while browsing the website.
-
-<p align="center">
-  <a href="https://angularspree.firebaseapp.com/" target="_blank">
-    <img alt="AngualreSpree Logo" title="AngularSpree Logo" width="80%" src="http://res.cloudinary.com/yatrum/image/upload/c_limit,h_1041,w_1487/v1490188642/screen_cart.png">
-  </a>
-</p>
-
-### Product detail page
-
-Display's the detailed product information of a particular product.
-
-<p align="center">
-  <a href="https://angularspree.firebaseapp.com/" target="_blank">
-    <img alt="AngualreSpree Logo" title="AngularSpree Logo" width="80%" src="http://res.cloudinary.com/yatrum/image/upload/c_limit,h_1041,w_1487/v1490188748/screen_product_page.png">
-  </a>
-</p>
-
-
-
-### Package Manager [Yarn](https://yarnpkg.com/en/)
-
-We are using Yarn as a package manager in this project though you can also use `npm` if you like to.
-
-## Backend for this project?
-
-
-**Start the API for this project to work successfully.
-
-We have a very thin and custom [repo](https://github.com/aviabird/angularspree-api/) which is the backend for this project. 
-Clone it and run the server. We have updated the readme on how to setup the backend API project.
-
-## Contributing to AngularSpree
-
-Where to start
-
-There are many different ways to contribute to AngularSpree's development, just find the one that best fits with your skills. Examples of contributions we would love to receive include:
-
-* Code patches
-* Documentation improvements
-* Translations(yet to come)
-* Bug reports
-* Patch reviews
-* UI enhancements
-
-Big features are also welcome but if you want to see your contributions included in AngularSpree's codebase we strongly recommend you start by initiating a chat on our __[slack channel](https://angular-spree.herokuapp.com/)__.
-
-## Development server
-Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Development server with Service Worker
-Run `npm run build--prod` to build in production with service worker pre-cache and then `npm run static-serve` to serve.
-
-## Build with Service Worker
-
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `npm run build--prod` for a production build.
-
-
-## Who are we?
-
-We are [Aviabird Technologies](https://aviabird.com).
-
-__We love to create awesome Web & Mobile products.__
-
-__We are very proud of our work.__
-
-We love technologies like Golang, Elixir, Scala, Ruby, Javascript, Typescript, Swift, Java.
-
-We love some frameworks too:-
-* Ruby On Rails
-* Phoenix/Elixir framework.
-* Spring framework.
-* AngularJs (1.x+ & 2.x+)
-* ReactJs
-* BackboneJs
-
-### We are avialible for hire
-
-__If you want to hire us for a project, please contact us on `hello@aviabird.com`.__
+For any questions or suggestions send a mail to `hello@aviabird.com` or chat with the core-team on [gitter](https://gitter.im/avia-commerce/Lobby).

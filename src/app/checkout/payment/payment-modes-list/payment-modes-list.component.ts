@@ -1,70 +1,74 @@
 import { getAuthStatus } from './../../../auth/reducers/selectors';
-import { CheckoutActions } from './../../actions/checkout.actions';
 import { AppState } from './../../../interfaces';
 import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
 import { PaymentMode } from './../../../core/models/payment_mode';
-import { PaymentService } from './../services/payment.service';
 import { CheckoutService } from './../../../core/services/checkout.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { environment } from '../../../../environments/environment';
+import { getIsPaymentAdded } from '../../reducers/selectors';
+import { Payment } from '../../../core/models/payment';
+import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-payment-modes-list',
   templateUrl: './payment-modes-list.component.html',
   styleUrls: ['./payment-modes-list.component.scss']
 })
-export class PaymentModesListComponent implements OnInit {
-
-  @Input() paymentAmount: number;
-  @Input() orderNumber: number;
+export class PaymentModesListComponent implements OnInit, OnDestroy {
+  paymentMethodId: number;
+  payment: Payment;
+  showDummyCardInfo = environment.config.showDummyCardInfo;
   paymentModes: PaymentMode[];
-  selectedMode: PaymentMode = new PaymentMode;
+  selectedMode: PaymentMode = new PaymentMode();
   isAuthenticated: boolean;
+  showOrderSuccess = false;
+  freeShippingAmount = environment.config.freeShippingAmount;
+  currency = environment.config.currency_symbol;
+  subscriptionList$: Array<Subscription> = [];
+  isPaymentAdded: boolean;
 
-  constructor(private checkoutService: CheckoutService,
-    private paymentService: PaymentService,
-    private router: Router,
+  constructor(
+    private checkoutService: CheckoutService,
     private store: Store<AppState>,
-    private checkoutActions: CheckoutActions) {
-      this.store.select(getAuthStatus).subscribe((auth) => {
-        this.isAuthenticated = auth;
-      });
-  }
+    private toastyService: ToastrService
+  ) {}
 
   ngOnInit() {
     this.fetchAllPayments();
+    this.subscriptionList$.push(
+      this.store.select(getAuthStatus).subscribe(auth => {
+        this.isAuthenticated = auth;
+      }),
+      this.store
+        .select(getIsPaymentAdded)
+        .subscribe(paymentStaus => (this.isPaymentAdded = paymentStaus))
+    );
   }
 
   selectedPaymentMode(mode) {
-    this.selectedMode = mode;
-  }
-
-  private fetchAllPayments() {
-    this.checkoutService.availablePaymentMethods()
-      .subscribe((payment) => {
-        this.paymentModes = payment.payment_methods;
-        this.selectedMode = this.paymentService.setCODAsSelectedMode(this.paymentModes);
-      });
-  }
-
-  makePayment() {
-    const paymentModeId = this.selectedMode.id;
-    this.checkoutService.createNewPayment(paymentModeId, this.paymentAmount)
-      .do(() => {
-        this.store.dispatch(this.checkoutActions.orderCompleteSuccess());
-        this.redirectToNewPage();
-        this.checkoutService.createEmptyOrder()
-          .subscribe();
-      })
-      .subscribe();
-  }
-
-  private redirectToNewPage() {
-    if (this.isAuthenticated) {
-      this.router.navigate(['/user', 'orders', 'detail', this.orderNumber]);
+    if (this.isPaymentAdded) {
+      this.toastyService.info(
+        'You have already confirmed payment mode for this order.',
+        'Info!'
+      );
     } else {
-      this.router.navigate(['/']);
+      this.selectedMode = mode;
     }
   }
 
+  private fetchAllPayments() {
+    this.subscriptionList$.push(
+      this.checkoutService.availablePaymentMethods().subscribe(payments => {
+        this.paymentModes = payments;
+        if (this.paymentModes.length > 0) {
+          this.selectedMode = this.paymentModes[0];
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptionList$.forEach(sub$ => sub$.unsubscribe());
+  }
 }

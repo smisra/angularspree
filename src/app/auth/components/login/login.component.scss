@@ -1,11 +1,17 @@
-@import "../../../shared/scss/themes";
+@import '../../../shared/scss/selected_theme_variables';
+.loginwindow {
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 10px 0;
+}
 
 .panel {
   margin-bottom: 20px;
-  background-color: #fff;
+  background-color: $gray-200;
   border: none;
-  border-radius: 0;
-  box-shadow: 0 2px 15px rgba(0,0,0,.1);
+  border-radius: 4px;
+  border: 1px solid $gray-10;
+  box-shadow: none;
   .panel-heading {
     padding: 30px 0 0;
     border-bottom: 1px solid transparent;
@@ -17,7 +23,7 @@
       margin-top: 0;
       margin-bottom: 0;
       font-size: 28px;
-      color: #666;
+      color: $gray-900;
       font-weight: 400;
     }
   }
@@ -25,7 +31,7 @@
 
 .login-input-container {
   margin: 20px;
-  border: 1px solid #bfc0c6;
+  border: 1px solid $gray-10;
   border-radius: 5px;
   padding: 0;
 }
@@ -53,7 +59,6 @@ fieldset {
   box-sizing: border-box;
   text-align: center;
   position: relative;
-  padding-bottom: 40px;
 }
 
 .login-user-input-email {
@@ -62,14 +67,14 @@ fieldset {
 }
 
 .login-user-input-password {
-  border-top: 1px solid #d5d6d9 !important;
+  border-top: 1px solid $gray-10 !important;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 
 .login-user-input {
   display: block;
-  color: #282c3f;
+  color: $gray-900;
   padding-right: 40px;
   font-size: 15px;
   width: 100%;
@@ -79,7 +84,7 @@ fieldset {
 
 input {
   -webkit-appearance: textfield;
-  background-color: white;
+  background-color: $white;
   -webkit-rtl-ordering: logical;
   user-select: text;
   cursor: auto;
@@ -102,9 +107,9 @@ input {
 }
 
 fieldset {
-  border: 1px solid silver;
+  border: 1px solid $gray-10;
   margin: 0 2px;
-  padding: .35em .625em .75em;
+  padding: 0.35em 0.625em 0.75em;
 }
 
 .login-login-button-container {
@@ -114,8 +119,8 @@ fieldset {
 }
 
 .login-login-button {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: bold;
   letter-spacing: 2px;
   padding: 15px;
   display: block;
@@ -123,15 +128,20 @@ fieldset {
   border: 0;
   text-transform: uppercase;
   border-radius: 3px;
+  background-color: $theme-action-color - 50;
+  color: $white;
 }
 
 .login-link-container {
-  text-align: left;
-  padding: 20px;
+  text-align: right;
+  padding: 0px 20px 12px;
+  font-size: 14px;
 }
 
 .login-link {
   text-decoration: none;
+  font-size: 15px;
+  color: $theme-action-color !important;
 }
 
 .login-right-links {
@@ -139,13 +149,8 @@ fieldset {
 }
 
 .login-info-text {
-  color: #94969f;
+  color: $gray-700;
   font-size: 12px;
-}
-
-.login-link-container {
-  text-align: left;
-  padding: 20px;
 }
 
 .login-create-account-link {
@@ -166,7 +171,7 @@ a {
 }
 
 .login-info-text {
-  color: #94969f;
+  color: $gray-700;
   font-size: 12px;
 }
 
@@ -177,8 +182,8 @@ a {
 
 @media (min-width: 360px) {
   .login-facebook {
-      margin-right: 15px;
-      margin-bottom: 0;
+    margin-right: 15px;
+    margin-bottom: 0;
   }
 }
 
@@ -194,49 +199,66 @@ a {
 }
 
 .login-button {
-  max-width: 162px;
+  width: 100%;
   padding-left: 18%;
   position: relative;
   font-size: 13px;
   font-weight: 500;
   height: 50px;
-  border: 1px solid #bfc0c6;
-  background-color: #fff;
+  border: 1px solid $gray-10;
+  background-color: $white;
   border-radius: 5px;
   text-align: left;
 }
 
-[type=reset], [type=submit], button, html [type=button] {
+[type='reset'],
+[type='submit'],
+button,
+html [type='button'] {
   -webkit-appearance: button;
 }
 
-[type=button], [type=reset], [type=submit], button {
+[type='button'],
+[type='reset'],
+[type='submit'],
+button {
   cursor: pointer;
 }
 
-button, select {
+button,
+select {
   text-transform: none;
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
   margin: 0;
 }
 
-button, input, select {
+button,
+input,
+select {
   overflow: visible;
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
   font: inherit;
 }
 
 .header-sprite {
-  background: url(http://res.cloudinary.com/mally/image/upload/v1489480940/148948096411965_w5wbjb.png) no-repeat 0 0;
+  background: url(http://res.cloudinary.com/mally/image/upload/v1489480940/148948096411965_w5wbjb.png)
+    no-repeat 0 0;
   background-size: 159px 48px;
   display: inline-block;
 }
 
-.login-fb-logo, .login-gplus-logo {
+.login-fb-logo,
+.login-gplus-logo {
   height: 29px;
   position: absolute;
   left: 15px;
@@ -255,7 +277,7 @@ button, input, select, textarea {
 }
 
 .login-error-icon {
-  border: 2px solid $state-danger-text;
+  border: 2px solid $danger;
   padding: 0 7px;
   display: inline-block;
   position: absolute;
@@ -273,10 +295,10 @@ button, input, select, textarea {
   max-height: 500px;
   -webkit-transition-property: all;
   transition-property: all;
-  -webkit-transition-duration: .5s;
-  transition-duration: .5s;
-  -webkit-transition-timing-function: cubic-bezier(0,1,.5,1);
-  transition-timing-function: cubic-bezier(0,1,.5,1);
+  -webkit-transition-duration: 0.5s;
+  transition-duration: 0.5s;
+  -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 
 p {
@@ -288,8 +310,18 @@ p {
 }
 
 .login-input-container {
+  background-color: $white;
   &:hover {
-    border: 1px solid $brand-danger;
-    box-shadow: 0 2px 5px $brand-danger + 100;
+    border: 1px solid $theme-main-color;
+    box-shadow: 0.1px 0.2px 0.4px $theme-main-color - 100;
+  }
+}
+
+.createacc {
+  display: flex;
+  align-items: center;
+  padding-left: 3rem;
+  @media screen and(min-width: 310px) and(max-width: 768px) {
+    padding-left: 15px;
   }
 }

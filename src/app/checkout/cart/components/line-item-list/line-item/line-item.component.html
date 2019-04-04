@@ -1,38 +1,87 @@
-<div class="prod-item">
-  <div class="col1">
-    <!--<img [src]="'http://assets.myntassets.com/h_128,q_100,w_96/v1/assets/images/1714052/2017/3/6/11488792709467-HRX-by-Hrithik-Roshan-Men-Black-Printed-Round-Neck-T-Shirt-191488792709172-1.jpg'">-->
-    <img [src]="image" alt="">
-  </div>
-  <div class="col2">
-    <div class="prod-name">
-      <a class="c-gray">
-        {{name}}
-      </a>
+<div class="prod-item pb-3" *ngIf="!isMobile">
+  <div *ngIf="name">
+    <div class="col1 col-4 col-sm-2 col-md-2 col-lg-2">
+      <img [src]="image" alt="" />
     </div>
-    <div class="prod-amount">
-      {{amount}}
-    </div>
-    <div class="size-qty-wrap">
-      <div class="size-qty">
-        <span class="size"> 
-          <span class="gray">Size:</span>
-          <span class="value">L</span>
-          <!--<span class="icon"></span>-->
-        </span>
-        <span class="qty">
-          <span class="gray">Qty:</span>
-          <span class="value">1</span>
-          <!--<span class="icon"></span>-->
-        </span>
+    <div class="col2 col-6 col-sm-10 col-md-10 col-lg-10">
+      <div class="row m-0">
+        <div class="prod-name col-9">
+          <div class="c-gray">
+            {{ name }}
+          </div>
+        </div>
+        <div class="size-qty-wrap col-3 p-0">
+          <div class="size-qty buy-quantity">
+            <a class="cw-btn  quantity-minus" (click)="removeQuantity()">-</a>
+            <input
+              type="text"
+              class="quantity-input"
+              value="{{ quantityCount }}"
+              id="quantity"
+              required
+            />
+            <a class="cw-btn  quantity-plus" (click)="addQuantity()">+</a>
+            <span class="qty">
+              <!-- <span class="gray">Qty:</span>
+            <span class="value">{{quantity}}</span> -->
+            </span>
+          </div>
+        </div>
       </div>
-      <div class="seller">Sold by: Proleague</div>
-    </div>
-    <div class="edit-move-delete">
-      <div class="actions">
-        <span (click)="removeLineItem()" class="delete-item">REMOVE</span>
-        <span class="move-item coming-soon">MOVE TO WISHLIST</span>
+      <div class="optiontxt">
+        <!-- {{optionName}}: {{optionValue}} -->
+      </div>
+      <div class="prod-amount">{{ currency }}{{ amount }}</div>
+      <div class="edit-move-delete">
+        <div class="actions">
+          <span (click)="removeLineItem()" class="delete-item">
+            <i class="fa fa-times"></i>
+          </span>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
+<div class="prod-item py-2" *ngIf="isMobile">
+  <div class="row m-0">
+    <div class="col1 col-4 ">
+      <img [src]="image" alt="" />
+    </div>
+    <div class="col2 col-8">
+      <div class="row m-0">
+        <div class="prod-name col-12">
+          <div class="c-gray">
+            {{ name }}
+          </div>
+        </div>
+        <div class="size-qty-wrap col-12 p-0">
+          <div class="size-qty buy-quantity">
+            <a class="cw-btn  quantity-minus" (click)="removeQuantity()">-</a>
+            <input
+              type="text"
+              class="quantity-input"
+              value="{{ quantityCount }}"
+              id="quantity"
+              required
+            />
+            <a class="cw-btn  quantity-plus" (click)="addQuantity()">+</a>
+            <span class="qty">
+              <!-- <span class="gray">Qty:</span>
+                  <span class="value">{{quantity}}</span> -->
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="prod-amount">
+        {{ amount }}
+      </div>
+      <div class="edit-move-delete">
+        <div class="actions">
+          <span (click)="removeLineItem()" class="delete-item">
+            <i class="fa fa-times"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

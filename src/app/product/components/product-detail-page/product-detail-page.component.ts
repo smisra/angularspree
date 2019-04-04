@@ -1,49 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
-import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from './../../../core/models/product';
-import { ProductService } from './../../../core/services/product.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product-detail-page',
-  templateUrl: './product-detail-page.component.html',
-  styleUrls: ['./product-detail-page.component.css']
+  template: `
+    <app-product-details
+      [product]="product$ | async"
+      [variantId]="variantId$ | async"
+    ></app-product-details>
+  `,
+  styles: [''],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductDetailPageComponent implements OnInit {
-  actionsSubscription: Subscription;
-  product$: Product = null;
-  routeSubs: Subscription;
-  productId: any;
+  product$: Observable<Product>;
+  variantId$: Observable<number>;
 
-  constructor(private productService: ProductService,
-              private route: ActivatedRoute) {
-
-  /**On Init
-   * 1. Parse route params
-   * 2. Retrive product id
-   * 3. Ask for the product detail based on product id 
-   * */
-    this.actionsSubscription = this.route.params.subscribe(
-      (params: any) => {
-        this.productId = params['id'];
-        this.productService
-          .getProduct(this.productId)
-          .subscribe(response => this.product$ = response);
-     }
-    );
-  };
-
+  constructor(private route: ActivatedRoute, private router: Router) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
 
   ngOnInit() {
+    this.product$ = this.route.data.pipe(map(({ product }) => product));
+    this.variantId$ = this.route.params.pipe(map(p => p.variantId));
   }
-
-  /**
-   * Action To be dispatched
-   * when added to cart
-   */
-  addToCart(){
-    return;
-  }
-
 }

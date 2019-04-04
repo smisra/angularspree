@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-checkout-header',
@@ -7,14 +8,13 @@ import { Router, NavigationStart } from '@angular/router';
   styleUrls: ['./checkout-header.component.scss']
 })
 export class CheckoutHeaderComponent implements OnInit {
-
   @Input() currentStep: string;
   private checkoutStep = ['cart', 'address', 'payment'];
-  constructor(private router: Router) {
-  }
+  public headerConfig = environment.config.header;
 
-  ngOnInit() {
-  }
+  constructor(private router: Router) {}
+
+  ngOnInit() {}
 
   isActiveRoute(step) {
     if (!this.currentStep) {
@@ -53,5 +53,4 @@ export class CheckoutHeaderComponent implements OnInit {
       return false;
     }
   }
-
 }

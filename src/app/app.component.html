@@ -1,15 +1,16 @@
-<div class="default">
+<ngx-json-ld [json]="schema"></ngx-json-ld>
+<div class="selected-theme">
   <section>
-    <app-header *ngIf="currentUrl && !isCheckoutRoute()"></app-header>
-    <app-checkout-header [currentStep]="currentStep" *ngIf="currentUrl && isCheckoutRoute()"></app-checkout-header>
-    <app-loading-indicator></app-loading-indicator>
-    <app-notification></app-notification>
+    <ng-progress [color]="'red'" [spinner]="false"></ng-progress>
 
-    <main class="body container">
+    <app-header
+      *ngIf="currentUrl"
+      [layoutState]="layoutState$ | async"
+    ></app-header>
+
+    <main class="main-body">
       <router-outlet></router-outlet>
     </main>
-
-    <app-checkout-footer *ngIf="currentUrl && isCheckoutRoute()"></app-checkout-footer>
-    <app-footer *ngIf="currentUrl && !isCheckoutRoute()"></app-footer>
+    <app-footer *ngIf="currentUrl"></app-footer>
   </section>
 </div>

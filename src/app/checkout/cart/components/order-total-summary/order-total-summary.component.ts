@@ -1,48 +1,66 @@
-import { getOrderState } from './../../../reducers/selectors';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
+import { environment } from '../../../../../environments/environment';
 import { Router } from '@angular/router';
-import { CheckoutService } from './../../../../core/services/checkout.service';
-import { CheckoutActions } from './../../../actions/checkout.actions';
-import { AppState } from './../../../../interfaces';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { AppState } from '../../../../interfaces';
+import { getAuthStatus } from '../../../../auth/reducers/selectors';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-order-total-summary',
   templateUrl: './order-total-summary.component.html',
   styleUrls: ['./order-total-summary.component.scss']
 })
-export class OrderTotalSummaryComponent implements OnInit, OnDestroy {
-
-  stateSub$: Subscription;
+export class OrderTotalSummaryComponent
+  implements OnInit, OnChanges, OnDestroy {
   orderState: string;
-  @Input() totalCartValue: number;
+  @Input() itemTotal: number;
+  @Input() isMobile;
+  enableshipping: boolean;
+  enableshippingvalue;
+  shippingProgress;
+  currency = environment.config.currency_symbol;
+  freeShippingAmount = environment.config.freeShippingAmount;
+  isAuthenticated: boolean;
+  subscriptionList$: Array<Subscription> = [];
 
-
-  constructor(private store: Store<AppState>,
-    private actions: CheckoutActions,
-    private checkoutService: CheckoutService,
-    private router: Router) {
-  this.stateSub$ = this.store.select(getOrderState)
-    .subscribe(state => this.orderState = state);
-  }
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit() {
+    this.subscriptionList$.push(
+      this.store.select(getAuthStatus).subscribe(authStatus => {
+        this.isAuthenticated = authStatus;
+      })
+    );
+  }
+
+  ngOnChanges() {
+    this.enableshippingcalculate();
+  }
+
+  enableshippingcalculate() {
+    if (this.itemTotal !== 0) {
+      this.enableshippingvalue = this.freeShippingAmount - this.itemTotal;
+      if (this.itemTotal < this.freeShippingAmount) {
+        this.enableshipping = true;
+        this.shippingProgress =
+          (this.itemTotal / this.freeShippingAmount) * 100;
+      } else {
+        this.enableshipping = false;
+        this.shippingProgress = 100;
+      }
+    }
   }
 
   placeOrder() {
-    if (this.orderState === 'cart') {
-      this.checkoutService.changeOrderState()
-        .do(() => {
-          this.router.navigate(['/checkout', 'address']);
-        })
-        .subscribe();
-    } else {
+    if (this.isAuthenticated) {
       this.router.navigate(['/checkout', 'address']);
+    } else {
+      this.router.navigate(['/auth', 'login']);
     }
   }
 
   ngOnDestroy() {
-    this.stateSub$.unsubscribe();
+    this.subscriptionList$.forEach(sub$ => sub$.unsubscribe());
   }
 }
